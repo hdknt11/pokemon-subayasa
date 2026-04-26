@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ポケモン素早さ計算</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 20px rgba(99, 179, 237, 0.6);
+    }
+
+    header p {
+      font-size: 0.75rem;
+      color: #a0aec0;
+      margin-top: 4px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .row.input-row {
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: border-color 0.2s;
+    }
+
+    .row.input-row:focus-within {
+      border-color: rgba(99, 179, 237, 0.5);
+      background: rgba(99, 179, 237, 0.08);
+    }
+
+    .row.input-row.highlight {
+      background: rgba(99, 179, 237, 0.08);
+      border-color: rgba(99, 179, 237, 0.3);
+    }
+
+    .row.input-row.scarf {
+      background: rgba(246, 173, 85, 0.08);
+      border-color: rgba(246, 173, 85, 0.2);
+    }
+
+    .row.input-row.scarf:focus-within {
+      border-color: rgba(246, 173, 85, 0.5);
+    }
+
+    .badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .badge-base {
+      background: rgba(167, 139, 250, 0.25);
+      color: #c4b5fd;
+      border: 1px solid rgba(167, 139, 250, 0.4);
+    }
+
+    .badge-fast {
+      background: rgba(52, 211, 153, 0.2);
+      color: #6ee7b7;
+      border: 1px solid rgba(52, 211, 153, 0.4);
+    }
+
+    .badge-normal {
+      background: rgba(96, 165, 250, 0.2);
+      color: #93c5fd;
+      border: 1px solid rgba(96, 165, 250, 0.4);
+    }
+
+    .badge-fast-scarf {
+      background: rgba(251, 191, 36, 0.2);
+      color: #fcd34d;
+      border: 1px solid rgba(251, 191, 36, 0.4);
+    }
+
+    .badge-normal-scarf {
+      background: rgba(251, 146, 60, 0.2);
+      color: #fdba74;
+      border: 1px solid rgba(251, 146, 60, 0.4);
+    }
+
+    input[type="number"] {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      text-align: right;
+      -moz-appearance: textfield;
+      min-width: 0;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+
+    input[type="number"]::placeholder {
+      color: rgba(255, 255, 255, 0.2);
+      font-weight: 400;
+      font-size: 1.1rem;
+    }
+
+    input[type="number"]:read-only {
+      color: #e2e8f0;
+      cursor: default;
+    }
+
+    input[type="number"]:read-only:focus {
+      outline: none;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+      margin: 4px 0;
+    }
+
+    .clear-btn {
+      display: flex;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    .clear-btn button {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #a0aec0;
+      font-size: 0.8rem;
+      padding: 8px 24px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .clear-btn button:active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .formula-note {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.25);
+      text-align: center;
+      margin-top: 4px;
+      line-height: 1.6;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0 4px;
+      margin-bottom: -6px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ 素早さ計算</h1>
+  <p>種族値から実数値を自動計算</p>
+</header>
+
+<div class="card">
+
+  <!-- 入力 -->
+  <div class="section-label">入力</div>
+  <div class="row input-row">
+    <span class="badge badge-base">種族値</span>
+    <input
+      type="number"
+      id="inputA"
+      placeholder="例：130"
+      min="0"
+      max="999"
+      inputmode="numeric"
+    />
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 通常 -->
+  <div class="section-label">補正あり / なし</div>
+  <div class="row input-row highlight">
+    <span class="badge badge-fast">最速</span>
+    <input type="number" id="inputB" readonly placeholder="—" />
+  </div>
+
+  <div class="row input-row">
+    <span class="badge badge-normal">準速</span>
+    <input type="number" id="inputC" readonly placeholder="—" />
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- スカーフ -->
+  <div class="section-label">スカーフ</div>
+  <div class="row input-row scarf">
+    <span class="badge badge-fast-scarf">最速スカーフ</span>
+    <input type="number" id="inputD" readonly placeholder="—" />
+  </div>
+
+  <div class="row input-row scarf">
+    <span class="badge badge-normal-scarf">準速スカーフ</span>
+    <input type="number" id="inputE" readonly placeholder="—" />
+  </div>
+
+  <div class="clear-btn">
+    <button onclick="clearAll()">クリア</button>
+  </div>
+
+  <p class="formula-note">
+    最速 = A×1.1+32　／　準速 = A+32<br>
+    スカーフ = 各実数値×1.5　（小数点以下切り捨て）
+  </p>
+
+</div>
+
+<script>
+  const inputA = document.getElementById('inputA');
+  const inputB = document.getElementById('inputB');
+  const inputC = document.getElementById('inputC');
+  const inputD = document.getElementById('inputD');
+  const inputE = document.getElementById('inputE');
+
+  inputA.addEventListener('input', () => {
+    const a = parseFloat(inputA.value);
+
+    if (inputA.value === '' || isNaN(a) || a < 0) {
+      inputB.value = '';
+      inputC.value = '';
+      inputD.value = '';
+      inputE.value = '';
+      return;
+    }
+
+    const b = Math.floor(a * 1.1 + 32);
+    const c = Math.floor(a + 32);
+    const d = Math.floor(b * 1.5);
+    const e = Math.floor(c * 1.5);
+
+    inputB.value = b;
+    inputC.value = c;
+    inputD.value = d;
+    inputE.value = e;
+  });
+
+  function clearAll() {
+    inputA.value = '';
+    inputB.value = '';
+    inputC.value = '';
+    inputD.value = '';
+    inputE.value = '';
+    inputA.focus();
+  }
+</script>
+
+</body>
+</html>
