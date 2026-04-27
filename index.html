@@ -8,11 +8,7 @@
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
@@ -21,14 +17,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 24px 16px;
+      padding: 24px 12px;
     }
 
     header {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
-
     header h1 {
       font-size: 1.5rem;
       font-weight: 800;
@@ -36,7 +31,6 @@
       letter-spacing: 0.05em;
       text-shadow: 0 0 20px rgba(99, 179, 237, 0.6);
     }
-
     header p {
       font-size: 0.75rem;
       color: #a0aec0;
@@ -48,268 +42,306 @@
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 20px;
-      padding: 24px 20px;
+      padding: 20px 14px;
       width: 100%;
-      max-width: 420px;
+      max-width: 480px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 10px;
     }
 
-    .row {
+    /* ── Section label ── */
+    .section-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0 2px;
+      margin-bottom: -4px;
+    }
+
+    /* ── Compare row: [input] [badge] [input] ── */
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: stretch;
+      gap: 6px;
+    }
+
+    .input-cell {
+      padding: 10px 10px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: border-color 0.2s, background 0.2s;
       display: flex;
       align-items: center;
-      gap: 12px;
     }
-
-    .row.input-row {
-      padding: 14px 16px;
-      background: rgba(255, 255, 255, 0.07);
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      transition: border-color 0.2s;
-    }
-
-    .row.input-row:focus-within {
+    .input-cell:focus-within {
       border-color: rgba(99, 179, 237, 0.5);
-      background: rgba(99, 179, 237, 0.08);
+      background: rgba(99, 179, 237, 0.09);
     }
-
-    .row.input-row.highlight {
-      background: rgba(99, 179, 237, 0.08);
-      border-color: rgba(99, 179, 237, 0.3);
-    }
-
-    .row.input-row.scarf {
-      background: rgba(246, 173, 85, 0.08);
-      border-color: rgba(246, 173, 85, 0.2);
-    }
-
-    .row.input-row.scarf:focus-within {
-      border-color: rgba(246, 173, 85, 0.5);
-    }
-
-    .badge {
-      font-size: 0.65rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 20px;
-      white-space: nowrap;
-      flex-shrink: 0;
-      letter-spacing: 0.02em;
-      min-width: 80px;
-      text-align: center;
-    }
-
-    .badge-base {
-      background: rgba(167, 139, 250, 0.25);
-      color: #c4b5fd;
-      border: 1px solid rgba(167, 139, 250, 0.4);
-    }
-
-    .badge-fast {
-      background: rgba(52, 211, 153, 0.2);
-      color: #6ee7b7;
-      border: 1px solid rgba(52, 211, 153, 0.4);
-    }
-
-    .badge-normal {
-      background: rgba(96, 165, 250, 0.2);
-      color: #93c5fd;
-      border: 1px solid rgba(96, 165, 250, 0.4);
-    }
-
-    .badge-fast-scarf {
-      background: rgba(251, 191, 36, 0.2);
-      color: #fcd34d;
-      border: 1px solid rgba(251, 191, 36, 0.4);
-    }
-
-    .badge-normal-scarf {
-      background: rgba(251, 146, 60, 0.2);
-      color: #fdba74;
-      border: 1px solid rgba(251, 146, 60, 0.4);
-    }
+    .input-cell.fast { border-color: rgba(52, 211, 153, 0.2); background: rgba(52, 211, 153, 0.06); }
+    .input-cell.fast:focus-within { border-color: rgba(52, 211, 153, 0.5); background: rgba(52, 211, 153, 0.1); }
+    .input-cell.scarf { border-color: rgba(246, 173, 85, 0.2); background: rgba(246, 173, 85, 0.06); }
+    .input-cell.scarf:focus-within { border-color: rgba(246, 173, 85, 0.5); background: rgba(246, 173, 85, 0.1); }
+    .input-cell.fast-scarf { border-color: rgba(251, 191, 36, 0.2); background: rgba(251, 191, 36, 0.06); }
+    .input-cell.fast-scarf:focus-within { border-color: rgba(251, 191, 36, 0.5); background: rgba(251, 191, 36, 0.1); }
 
     input[type="number"] {
-      flex: 1;
+      width: 100%;
       background: transparent;
       border: none;
       outline: none;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: #fff;
-      text-align: right;
+      text-align: center;
       -moz-appearance: textfield;
-      min-width: 0;
     }
-
     input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-    }
-
+    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
     input[type="number"]::placeholder {
-      color: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.18);
       font-weight: 400;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
+    input[type="number"]:read-only { color: #e2e8f0; cursor: default; }
 
-    input[type="number"]:read-only {
-      color: #e2e8f0;
-      cursor: default;
+    /* ── Center badge ── */
+    .center-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-
-    input[type="number"]:read-only:focus {
-      outline: none;
+    .badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 4px 7px;
+      border-radius: 20px;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+      text-align: center;
     }
+    .badge-base       { background: rgba(167,139,250,0.25); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.4); }
+    .badge-fast       { background: rgba(52,211,153,0.2);  color: #6ee7b7; border: 1px solid rgba(52,211,153,0.4); }
+    .badge-normal     { background: rgba(96,165,250,0.2);  color: #93c5fd; border: 1px solid rgba(96,165,250,0.4); }
+    .badge-fast-scarf { background: rgba(251,191,36,0.2);  color: #fcd34d; border: 1px solid rgba(251,191,36,0.4); }
+    .badge-scarf      { background: rgba(251,146,60,0.2);  color: #fdba74; border: 1px solid rgba(251,146,60,0.4); }
 
+    /* ── Winner highlight ── */
+    .winner { box-shadow: 0 0 0 2px rgba(99, 255, 180, 0.55); }
+    .loser  { opacity: 0.5; }
+
+    /* ── Divider ── */
     .divider {
       height: 1px;
-      background: rgba(255, 255, 255, 0.08);
-      margin: 4px 0;
+      background: rgba(255, 255, 255, 0.07);
+      margin: 2px 0;
     }
 
-    .clear-btn {
-      display: flex;
-      justify-content: center;
-      margin-top: 4px;
+    /* ── Column headers ── */
+    .col-headers {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 6px;
+      padding: 0 2px;
     }
+    .col-header {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 5px 4px;
+      border-radius: 8px;
+    }
+    .col-header-a { background: rgba(139,92,246,0.2); color: #c4b5fd; }
+    .col-header-b { background: rgba(100,116,139,0.15); color: rgba(255,255,255,0.2); font-size: 0.55rem; }
+    .col-header-b span { display: block; }
 
-    .clear-btn button {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #a0aec0;
-      font-size: 0.8rem;
-      padding: 8px 24px;
-      border-radius: 30px;
+    /* ── Clear buttons ── */
+    .clear-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 6px;
+      margin-top: 2px;
+    }
+    .clear-row button {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #94a3b8;
+      font-size: 0.72rem;
+      padding: 7px 4px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: all 0.2s;
       font-family: inherit;
+      transition: all 0.2s;
     }
-
-    .clear-btn button:active {
-      background: rgba(255, 255, 255, 0.15);
-      color: #fff;
-    }
+    .clear-row button:active { background: rgba(255,255,255,0.15); color: #fff; }
+    .clear-row .spacer { /* center spacer */ }
 
     .formula-note {
-      font-size: 0.65rem;
-      color: rgba(255,255,255,0.25);
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.2);
       text-align: center;
-      margin-top: 4px;
-      line-height: 1.6;
-    }
-
-    .section-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.35);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 0 4px;
-      margin-bottom: -6px;
+      line-height: 1.7;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>⚡ 素早さ計算</h1>
-  <p>種族値から実数値を自動計算</p>
+  <h1>⚡ 素早さ比較</h1>
+  <p>2体の種族値を並べて比較</p>
 </header>
 
 <div class="card">
 
-  <!-- 入力 -->
-  <div class="section-label">入力</div>
-  <div class="row input-row">
-    <span class="badge badge-base">種族値</span>
-    <input
-      type="number"
-      id="inputA"
-      placeholder="例：130"
-      min="0"
-      max="999"
-      inputmode="numeric"
-    />
+  <!-- Column headers -->
+  <div class="col-headers">
+    <div class="col-header col-header-a">ポケモン①</div>
+    <div class="col-header col-header-b"><span>VS</span></div>
+    <div class="col-header col-header-a">ポケモン②</div>
+  </div>
+
+  <!-- 種族値 -->
+  <div class="section-label">種族値</div>
+  <div class="compare-row">
+    <div class="input-cell">
+      <input type="number" id="a1" placeholder="例 130" min="0" max="999" inputmode="numeric" />
+    </div>
+    <div class="center-badge"><span class="badge badge-base">種族値</span></div>
+    <div class="input-cell">
+      <input type="number" id="a2" placeholder="例 130" min="0" max="999" inputmode="numeric" />
+    </div>
   </div>
 
   <div class="divider"></div>
-
-  <!-- 通常 -->
   <div class="section-label">補正あり / なし</div>
-  <div class="row input-row highlight">
-    <span class="badge badge-fast">最速</span>
-    <input type="number" id="inputB" readonly placeholder="—" />
+
+  <!-- 最速 -->
+  <div class="compare-row">
+    <div class="input-cell fast" id="b1-cell">
+      <input type="number" id="b1" readonly placeholder="—" />
+    </div>
+    <div class="center-badge"><span class="badge badge-fast">最速</span></div>
+    <div class="input-cell fast" id="b2-cell">
+      <input type="number" id="b2" readonly placeholder="—" />
+    </div>
   </div>
 
-  <div class="row input-row">
-    <span class="badge badge-normal">準速</span>
-    <input type="number" id="inputC" readonly placeholder="—" />
+  <!-- 準速 -->
+  <div class="compare-row">
+    <div class="input-cell" id="c1-cell">
+      <input type="number" id="c1" readonly placeholder="—" />
+    </div>
+    <div class="center-badge"><span class="badge badge-normal">準速</span></div>
+    <div class="input-cell" id="c2-cell">
+      <input type="number" id="c2" readonly placeholder="—" />
+    </div>
   </div>
 
   <div class="divider"></div>
-
-  <!-- スカーフ -->
   <div class="section-label">スカーフ</div>
-  <div class="row input-row scarf">
-    <span class="badge badge-fast-scarf">最速スカーフ</span>
-    <input type="number" id="inputD" readonly placeholder="—" />
+
+  <!-- 最速スカーフ -->
+  <div class="compare-row">
+    <div class="input-cell fast-scarf" id="d1-cell">
+      <input type="number" id="d1" readonly placeholder="—" />
+    </div>
+    <div class="center-badge"><span class="badge badge-fast-scarf">最速<br>スカーフ</span></div>
+    <div class="input-cell fast-scarf" id="d2-cell">
+      <input type="number" id="d2" readonly placeholder="—" />
+    </div>
   </div>
 
-  <div class="row input-row scarf">
-    <span class="badge badge-normal-scarf">準速スカーフ</span>
-    <input type="number" id="inputE" readonly placeholder="—" />
+  <!-- 準速スカーフ -->
+  <div class="compare-row">
+    <div class="input-cell scarf" id="e1-cell">
+      <input type="number" id="e1" readonly placeholder="—" />
+    </div>
+    <div class="center-badge"><span class="badge badge-scarf">準速<br>スカーフ</span></div>
+    <div class="input-cell scarf" id="e2-cell">
+      <input type="number" id="e2" readonly placeholder="—" />
+    </div>
   </div>
 
-  <div class="clear-btn">
-    <button onclick="clearAll()">クリア</button>
+  <!-- Clear buttons -->
+  <div class="clear-row">
+    <button onclick="clearSide(1)">①クリア</button>
+    <div class="spacer"></div>
+    <button onclick="clearSide(2)">②クリア</button>
   </div>
 
   <p class="formula-note">
-    最速 = A×1.1+32　／　準速 = A+32<br>
-    スカーフ = 各実数値×1.5　（小数点以下切り捨て）
+    最速 = 種族値×1.1+32　／　準速 = 種族値+32<br>
+    スカーフ = 実数値×1.5　（小数点以下切り捨て）
   </p>
 
 </div>
 
 <script>
-  const inputA = document.getElementById('inputA');
-  const inputB = document.getElementById('inputB');
-  const inputC = document.getElementById('inputC');
-  const inputD = document.getElementById('inputD');
-  const inputE = document.getElementById('inputE');
+  const pairs = [
+    { in1: 'a1', in2: 'a2', out1: null, out2: null },
+    { in1: null, in2: null, out1: 'b1', out2: 'b2', cells: ['b1-cell', 'b2-cell'] },
+    { in1: null, in2: null, out1: 'c1', out2: 'c2', cells: ['c1-cell', 'c2-cell'] },
+    { in1: null, in2: null, out1: 'd1', out2: 'd2', cells: ['d1-cell', 'd2-cell'] },
+    { in1: null, in2: null, out1: 'e1', out2: 'e2', cells: ['e1-cell', 'e2-cell'] },
+  ];
 
-  inputA.addEventListener('input', () => {
-    const a = parseFloat(inputA.value);
+  function calc(a) {
+    if (a === '' || isNaN(+a) || +a < 0) return null;
+    const v = +a;
+    return {
+      b: Math.floor(v * 1.1 + 32),
+      c: Math.floor(v + 32),
+      d: Math.floor(Math.floor(v * 1.1 + 32) * 1.5),
+      e: Math.floor(Math.floor(v + 32) * 1.5),
+    };
+  }
 
-    if (inputA.value === '' || isNaN(a) || a < 0) {
-      inputB.value = '';
-      inputC.value = '';
-      inputD.value = '';
-      inputE.value = '';
-      return;
-    }
+  function setVal(id, val) {
+    document.getElementById(id).value = val !== null ? val : '';
+  }
 
-    const b = Math.floor(a * 1.1 + 32);
-    const c = Math.floor(a + 32);
-    const d = Math.floor(b * 1.5);
-    const e = Math.floor(c * 1.5);
+  function updateCompare() {
+    const r1 = calc(document.getElementById('a1').value);
+    const r2 = calc(document.getElementById('a2').value);
 
-    inputB.value = b;
-    inputC.value = c;
-    inputD.value = d;
-    inputE.value = e;
-  });
+    const keys = ['b', 'c', 'd', 'e'];
+    const cellPairs = [
+      ['b1-cell', 'b2-cell'],
+      ['c1-cell', 'c2-cell'],
+      ['d1-cell', 'd2-cell'],
+      ['e1-cell', 'e2-cell'],
+    ];
 
-  function clearAll() {
-    inputA.value = '';
-    inputB.value = '';
-    inputC.value = '';
-    inputD.value = '';
-    inputE.value = '';
-    inputA.focus();
+    keys.forEach((k, i) => {
+      const v1 = r1 ? r1[k] : null;
+      const v2 = r2 ? r2[k] : null;
+      setVal(k + '1', v1);
+      setVal(k + '2', v2);
+
+      const c1 = document.getElementById(cellPairs[i][0]);
+      const c2 = document.getElementById(cellPairs[i][1]);
+      c1.classList.remove('winner', 'loser');
+      c2.classList.remove('winner', 'loser');
+
+      if (v1 !== null && v2 !== null && v1 !== v2) {
+        if (v1 > v2) { c1.classList.add('winner'); c2.classList.add('loser'); }
+        else         { c2.classList.add('winner'); c1.classList.add('loser'); }
+      }
+    });
+  }
+
+  document.getElementById('a1').addEventListener('input', updateCompare);
+  document.getElementById('a2').addEventListener('input', updateCompare);
+
+  function clearSide(n) {
+    const ids = [`a${n}`, `b${n}`, `c${n}`, `d${n}`, `e${n}`];
+    ids.forEach(id => document.getElementById(id).value = '');
+    updateCompare();
+    document.getElementById(`a${n}`).focus();
   }
 </script>
 
